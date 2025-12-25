@@ -55,7 +55,7 @@
             <FCText Name="ShowCustomFolder"/>
             <FCBool Name="Migration2024Complete" Value="1"/>
             <FCBool Name="FirstStart2024" Value="0"/>
-            <FCText Name="CustomFolder"></FCText>
+            <FCText Name="CustomFolder"/>
             <FCBool Name="closeStart" Value="0"/>
             <FCBool Name="ShowOnlyFCStd" Value="0"/>
             <FCUInt Name="FileThumbnailBackgroundColor" Value="3554532863"/>
@@ -78,16 +78,16 @@
             <FCParamGroup Name="STEP">
               <FCInt Name="Unit" Value="0"/>
               <FCText Name="Scheme">AP214IS</FCText>
-              <FCText Name="Company"></FCText>
-              <FCText Name="Author"></FCText>
+              <FCText Name="Company"/>
+              <FCText Name="Author"/>
               <FCBool Name="VisibleImportDialog" Value="1"/>
             </FCParamGroup>
             <FCParamGroup Name="IGES">
               <FCInt Name="Unit" Value="0"/>
               <FCBool Name="BrepMode" Value="0"/>
               <FCBool Name="SkipBlankEntities" Value="1"/>
-              <FCText Name="Company"></FCText>
-              <FCText Name="Author"></FCText>
+              <FCText Name="Company"/>
+              <FCText Name="Author"/>
             </FCParamGroup>
             <FCParamGroup Name="Boolean">
               <FCBool Name="CheckModel" Value="1"/>
@@ -102,9 +102,9 @@
             <FCUInt Name="DimensionsDeltaColor" Value="210082303"/>
           </FCParamGroup>
           <FCParamGroup Name="Help">
-            <FCText Name="Suffix"></FCText>
-            <FCText Name="Location"></FCText>
-            <FCText Name="StyleSheet"></FCText>
+            <FCText Name="Suffix"/>
+            <FCText Name="Location"/>
+            <FCText Name="StyleSheet"/>
             <FCBool Name="optionGithub" Value="0"/>
             <FCBool Name="optionCustom" Value="0"/>
             <FCBool Name="optionWiki" Value="1"/>
@@ -124,7 +124,7 @@
             <FCUInt Name="WindowGlassColor" Value="363511807"/>
             <FCInt Name="ifcMulticore" Value="0"/>
             <FCText Name="ifcRootElement">IfcProduct</FCText>
-            <FCText Name="ifcSkip"></FCText>
+            <FCText Name="ifcSkip"/>
             <FCInt Name="ifcImportModeArch" Value="0"/>
             <FCInt Name="ifcImportModeStruct" Value="0"/>
             <FCBool Name="ifcDebug" Value="0"/>
@@ -249,7 +249,7 @@
             <FCBool Name="dxfImportAsPrimitives" Value="0"/>
             <FCBool Name="dxfImportAsShapes" Value="1"/>
             <FCBool Name="dxfImportAsFused" Value="0"/>
-            <FCText Name="TeighaFileConverter"></FCText>
+            <FCText Name="TeighaFileConverter"/>
             <FCInt Name="DWGConversion" Value="0"/>
             <FCInt Name="svgPrecision" Value="3"/>
             <FCFloat Name="svgDiscretization" Value="0.000000000000"/>
@@ -279,7 +279,7 @@
             <FCInt Name="MouseDelay" Value="1"/>
             <FCInt Name="DraftEditMaxObjects" Value="5"/>
             <FCInt Name="DraftEditPickRadius" Value="20"/>
-            <FCText Name="ClonePrefix"></FCText>
+            <FCText Name="ClonePrefix"/>
             <FCText Name="constructiongroupname">Construction</FCText>
             <FCBool Name="showPlaneTracker" Value="0"/>
             <FCBool Name="AutogroupAddGroups" Value="0"/>
@@ -325,13 +325,13 @@
             <FCBool Name="gridShowHuman" Value="0"/>
             <FCBool Name="coloredGridAxes" Value="1"/>
             <FCBool Name="alwaysSnap" Value="1"/>
-            <FCText Name="patternFile"></FCText>
+            <FCText Name="patternFile"/>
             <FCInt Name="DefaultAnnoLineWidth" Value="2"/>
             <FCInt Name="dimPrecision" Value="2"/>
             <FCFloat Name="DefaultAnnoScaleMultiplier" Value="1.000000000000"/>
             <FCFloat Name="LineSpacing" Value="1.000000000000"/>
-            <FCText Name="overrideUnit"></FCText>
-            <FCText Name="FeetSeparator"></FCText>
+            <FCText Name="overrideUnit"/>
+            <FCText Name="FeetSeparator"/>
             <FCInt Name="dimsymbolstart" Value="0"/>
             <FCInt Name="dimsymbolend" Value="0"/>
             <FCBool Name="DimShowLine" Value="1"/>
@@ -382,7 +382,7 @@
               <FCInt Name="ConstraintFilterState" Value="33554431"/>
               <FCBool Name="ElementFilterEnabled" Value="1"/>
               <FCText Name="OverrideMode">As Is</FCText>
-              <FCInt Name="" Value="0"/>
+              <FCInt Name="" Value="1"/>
               <FCBool Name="NotifyConstraintSubstitutions" Value="1"/>
               <FCBool Name="AlwaysExtGeoReference" Value="0"/>
               <FCBool Name="ShowGrid" Value="0"/>
@@ -402,7 +402,9 @@
               <FCUInt Name="SketchFaceColor" Value="1420558142"/>
               <FCText Name="GridSize">10.00 mm</FCText>
             </FCParamGroup>
-            <FCParamGroup Name="Snap"/>
+            <FCParamGroup Name="Snap">
+              <FCBool Name="SnapToObjects" Value="0"/>
+            </FCParamGroup>
             <FCParamGroup Name="Constraints">
               <FCBool Name="UnifiedCoincident" Value="1"/>
               <FCBool Name="AutoHorVer" Value="1"/>
@@ -533,12 +535,12 @@
             </FCParamGroup>
             <FCParamGroup Name="Rez"/>
             <FCParamGroup Name="Files">
-              <FCText Name="TemplateFile"></FCText>
-              <FCText Name="TemplateDir"></FCText>
-              <FCText Name="FileHatch"></FCText>
-              <FCText Name="LineGroupFile"></FCText>
-              <FCText Name="WeldingDir"></FCText>
-              <FCText Name="DirSymbol"></FCText>
+              <FCText Name="TemplateFile"/>
+              <FCText Name="TemplateDir"/>
+              <FCText Name="FileHatch"/>
+              <FCText Name="LineGroupFile"/>
+              <FCText Name="WeldingDir"/>
+              <FCText Name="DirSymbol"/>
             </FCParamGroup>
             <FCParamGroup Name="Standards">
               <FCInt Name="LineStandard" Value="1"/>
@@ -592,7 +594,7 @@
               <FCBool Name="SwitchToWB" Value="1"/>
             </FCParamGroup>
             <FCParamGroup Name="PAT">
-              <FCText Name="FilePattern"></FCText>
+              <FCText Name="FilePattern"/>
               <FCText Name="NamePattern">Diamond</FCText>
               <FCInt Name="MaxSeg" Value="10000"/>
             </FCParamGroup>
@@ -636,7 +638,7 @@
               <FCBool Name="UseMaterialsFromWorkbenches" Value="1"/>
               <FCBool Name="UseMaterialsFromConfigDir" Value="1"/>
               <FCBool Name="UseMaterialsFromCustomDir" Value="1"/>
-              <FCText Name="CustomMaterialsDir"></FCText>
+              <FCText Name="CustomMaterialsDir"/>
             </FCParamGroup>
             <FCParamGroup Name="Cards">
               <FCBool Name="DeleteDuplicates" Value="1"/>
@@ -690,7 +692,6 @@
                   <FCBool Name="Test" Value="1"/>
                   <FCParamGroup Name="Test"/>
                 </FCParamGroup>
-                <FCParamGroup Name="User"/>
               </FCParamGroup>
               <FCBool Name="ShowFavorites" Value="1"/>
               <FCBool Name="ShowRecent" Value="1"/>
@@ -724,7 +725,7 @@
             <FCUInt Name="DefaultBBoxNormalColor" Value="1230002175"/>
           </FCParamGroup>
           <FCParamGroup Name="BIM">
-            <FCText Name="WebGLTemplateCustomPath"></FCText>
+            <FCText Name="WebGLTemplateCustomPath"/>
             <FCBool Name="useCustomWebGLExportTemplate" Value="0"/>
             <FCBool Name="RestoreBimViews" Value="0"/>
             <FCInt Name="ViewManagerColumnWidth" Value="100"/>
@@ -811,8 +812,8 @@
           <FCText Name="Theme">OpenLight</FCText>
           <FCBool Name="Maximized" Value="0"/>
           <FCBool Name="StatusBar" Value="1"/>
-          <FCText Name="MainWindowState">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</FCText>
-          <FCText Name="Geometry">1470 183 1495 1117</FCText>
+          <FCText Name="MainWindowState">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</FCText>
+          <FCText Name="Geometry">1470 136 1775 1117</FCText>
           <FCBool Name="WindowStateRestored" Value="1"/>
           <FCBool Name="InputHintEnabled" Value="1"/>
           <FCBool Name="QuickMeasureEnabled" Value="1"/>
@@ -991,10 +992,10 @@
           <FCBool Name="DuplicateLabels" Value="0"/>
           <FCBool Name="NoPartialLoading" Value="0"/>
           <FCInt Name="prefLicenseType" Value="0"/>
-          <FCText Name="prefLicenseUrl"></FCText>
-          <FCText Name="prefAuthor"></FCText>
+          <FCText Name="prefLicenseUrl"/>
+          <FCText Name="prefAuthor"/>
           <FCBool Name="prefSetAuthorOnSave" Value="0"/>
-          <FCText Name="prefCompany"></FCText>
+          <FCText Name="prefCompany"/>
           <FCBool Name="RecoveryEnabled" Value="1"/>
           <FCBool Name="AutoSaveEnabled" Value="1"/>
           <FCInt Name="AutoSaveTimeout" Value="15"/>
@@ -1067,7 +1068,7 @@
           <FCBool Name="PythonBlockCursor" Value="0"/>
           <FCBool Name="SavePythonHistory" Value="0"/>
           <FCInt Name="ProfilerInterval" Value="200"/>
-          <FCText Name="PathToPythonExecutable"></FCText>
+          <FCText Name="PathToPythonExecutable"/>
         </FCParamGroup>
         <FCParamGroup Name="TreeView">
           <FCInt Name="ColumnSize1" Value="520"/>
@@ -1092,7 +1093,7 @@
         </FCParamGroup>
         <FCParamGroup Name="Expression"/>
         <FCParamGroup Name="PropertyView">
-          <FCInt Name="LastTabIndex" Value="0"/>
+          <FCInt Name="LastTabIndex" Value="1"/>
         </FCParamGroup>
         <FCParamGroup Name="Workbenches">
           <FCText Name="Ordered">AssemblyWorkbench,BIMWorkbench,DraftWorkbench,PartDesignWorkbench,PartWorkbench,SpreadsheetWorkbench,SurfaceWorkbench,TechDrawWorkbench</FCText>
@@ -1101,9 +1102,10 @@
         </FCParamGroup>
         <FCParamGroup Name="Commands"/>
         <FCParamGroup Name="RecentFiles">
-          <FCText Name="MRU0">/Users/katzo/ws/cad/Freecad/lesson12.FCStd</FCText>
-          <FCText Name="MRU1">/Users/katzo/ws/cad/Freecad/lesson8.FCStd</FCText>
-          <FCText Name="MRU2">/Users/katzo/ws/cad/Freecad/lesson9.FCStd</FCText>
+          <FCText Name="MRU0">/Users/katzo/Downloads/MountTest.FCStd</FCText>
+          <FCText Name="MRU1">/Users/katzo/ws/cad/Freecad/lesson12.FCStd</FCText>
+          <FCText Name="MRU2">/Users/katzo/ws/cad/projects/LP Holder1.FCStd</FCText>
+          <FCText Name="MRU3">/Users/katzo/ws/cad/projects/LP Holder.FCStd</FCText>
           <FCInt Name="RecentFiles" Value="4"/>
         </FCParamGroup>
         <FCParamGroup Name="NaviCube">
@@ -1136,8 +1138,8 @@
           <FCBool Name="HideUnlicensed" Value="0"/>
           <FCBool Name="HideNonFSFFreeLibre" Value="0"/>
           <FCBool Name="HideNonOSIApproved" Value="0"/>
-          <FCText Name="AddonsScoreURL"></FCText>
-          <FCText Name="CustomRepositories"></FCText>
+          <FCText Name="AddonsScoreURL"/>
+          <FCText Name="CustomRepositories"/>
           <FCBool Name="readWarning2022" Value="1"/>
           <FCInt Name="ViewStyle" Value="1"/>
           <FCText Name="last_fetched_addon_catalog_cache_hash">e4750f85b8b32715a40c1243e77d386df7682e1fac399fac61d12691bfff4434</FCText>
@@ -1154,6 +1156,7 @@
           </FCParamGroup>
         </FCParamGroup>
         <FCParamGroup Name="Dialog"/>
+        <FCParamGroup Name="Placement"/>
       </FCParamGroup>
       <FCParamGroup Name="Macro">
         <FCParamGroup Name="Macros"/>
@@ -1162,29 +1165,29 @@
         <FCParamGroup Name="DockWindows">
           <FCParamGroup Name="OverlayLeft">
             <FCInt Name="Width" Value="538"/>
-            <FCInt Name="Height" Value="955"/>
+            <FCInt Name="Height" Value="939"/>
             <FCText Name="Widgets">Model,Report view,</FCText>
-            <FCText Name="Sizes">15,0</FCText>
+            <FCText Name="Sizes">794,105</FCText>
             <FCBool Name="Transparent" Value="0"/>
-            <FCBool Name="AutoHide" Value="1"/>
+            <FCBool Name="AutoHide" Value="0"/>
             <FCBool Name="EditShow" Value="0"/>
             <FCBool Name="EditHide" Value="0"/>
             <FCBool Name="TaskShow" Value="0"/>
           </FCParamGroup>
           <FCParamGroup Name="OverlayRight">
             <FCInt Name="Width" Value="490"/>
-            <FCInt Name="Height" Value="813"/>
+            <FCInt Name="Height" Value="797"/>
             <FCText Name="Widgets"></FCText>
             <FCText Name="Sizes"></FCText>
           </FCParamGroup>
           <FCParamGroup Name="OverlayTop">
-            <FCInt Name="Width" Value="997"/>
+            <FCInt Name="Width" Value="695"/>
             <FCInt Name="Height" Value="316"/>
             <FCText Name="Widgets"></FCText>
             <FCText Name="Sizes"></FCText>
           </FCParamGroup>
           <FCParamGroup Name="OverlayBottom">
-            <FCInt Name="Width" Value="1129"/>
+            <FCInt Name="Width" Value="1365"/>
             <FCInt Name="Height" Value="90"/>
             <FCText Name="Widgets"></FCText>
             <FCText Name="Sizes"></FCText>
@@ -1263,18 +1266,34 @@
           <FCBool Name="TechDraw Annotation" Value="1"/>
         </FCParamGroup>
       </FCParamGroup>
-      <FCParamGroup Name="Workbench"/>
+      <FCParamGroup Name="Workbench">
+        <FCParamGroup Name="SketcherWorkbench">
+          <FCParamGroup Name="Toolbar"/>
+        </FCParamGroup>
+      </FCParamGroup>
       <FCParamGroup Name="History">
         <FCParamGroup Name="SketcherLength">
-          <FCText Name="DatumValue">3.00 mm</FCText>
+          <FCText Name="DatumValue">12.00 mm</FCText>
           <FCParamGroup Name="DatumValue_History">
-            <FCText Name="Hist0">4.27 mm</FCText>
-            <FCText Name="Hist1">3.00 mm</FCText>
+            <FCText Name="Hist0">18.00 mm</FCText>
+            <FCText Name="Hist1">12.00 mm</FCText>
           </FCParamGroup>
         </FCParamGroup>
         <FCParamGroup Name="Dragger">
           <FCFloat Name="LastTranslationIncrement" Value="0.000000000000"/>
           <FCFloat Name="LastRotationIncrement" Value="5.000000000000"/>
+        </FCParamGroup>
+        <FCParamGroup Name="PadLength"/>
+        <FCParamGroup Name="PadLength2"/>
+        <FCParamGroup Name="PadOffset"/>
+        <FCParamGroup Name="PadOffset2"/>
+        <FCParamGroup Name="PadTaperAngle"/>
+        <FCParamGroup Name="PadTaperAngle2"/>
+        <FCParamGroup Name="SketcherAngle">
+          <FCText Name="DatumValue">90.00°</FCText>
+          <FCParamGroup Name="DatumValue_History">
+            <FCText Name="Hist0">90.00°</FCText>
+          </FCParamGroup>
         </FCParamGroup>
       </FCParamGroup>
     </FCParamGroup>
@@ -1289,9 +1308,6 @@
         </FCParamGroup>
         <FCParamGroup Name="System">
           <FCParamGroup Name="PartDesignWorkbench"/>
-          <FCParamGroup Name="SketcherWorkbench"/>
-          <FCParamGroup Name="PartWorkbench"/>
-          <FCParamGroup Name="SpreadsheetWorkbench"/>
         </FCParamGroup>
       </FCParamGroup>
       <FCParamGroup Name="NavigationIndicator">
