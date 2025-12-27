@@ -7,7 +7,7 @@
       </FCParamGroup>
       <FCParamGroup Name="Preferences">
         <FCParamGroup Name="General">
-          <FCText Name="FileOpenSavePath">/Users/katzo/ws/cad/Freecad</FCText>
+          <FCText Name="FileOpenSavePath">/Users/katzo/ws/cad/projects</FCText>
           <FCParamGroup Name="HiddenPreferencePacks"/>
           <FCText Name="AutoloadModule">PartDesignWorkbench</FCText>
           <FCText Name="BackgroundAutoloadModules">AssemblyWorkbench,BIMWorkbench,DraftWorkbench,PartDesignWorkbench,PartWorkbench,SpreadsheetWorkbench,SurfaceWorkbench,TechDrawWorkbench</FCText>
@@ -30,7 +30,7 @@
         </FCParamGroup>
         <FCParamGroup Name="Macro">
           <FCBool Name="LocalEnvironment" Value="1"/>
-          <FCText Name="MacroPath">/Users/katzo/Library/Application Support/FreeCAD/v1-1/Macro</FCText>
+          <FCText Name="MacroPath">/Users/katzo/ws/cad/Freecad/macros</FCText>
           <FCBool Name="RecordGui" Value="1"/>
           <FCBool Name="GuiAsComment" Value="1"/>
           <FCBool Name="ScriptToPyConsole" Value="1"/>
@@ -382,7 +382,7 @@
               <FCInt Name="ConstraintFilterState" Value="33554431"/>
               <FCBool Name="ElementFilterEnabled" Value="1"/>
               <FCText Name="OverrideMode">As Is</FCText>
-              <FCInt Name="" Value="1"/>
+              <FCInt Name="" Value="0"/>
               <FCBool Name="NotifyConstraintSubstitutions" Value="1"/>
               <FCBool Name="AlwaysExtGeoReference" Value="0"/>
               <FCBool Name="ShowGrid" Value="0"/>
@@ -810,10 +810,10 @@
           <FCText Name="OverlayActiveStyleSheet">OpenLight_Overlay.qss</FCText>
           <FCText Name="StyleSheet">OpenLight.qss</FCText>
           <FCText Name="Theme">OpenLight</FCText>
-          <FCBool Name="Maximized" Value="0"/>
+          <FCBool Name="Maximized" Value="1"/>
           <FCBool Name="StatusBar" Value="1"/>
-          <FCText Name="MainWindowState">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</FCText>
-          <FCText Name="Geometry">1470 136 1775 1117</FCText>
+          <FCText Name="MainWindowState">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</FCText>
+          <FCText Name="Geometry">0 38 1470 805</FCText>
           <FCBool Name="WindowStateRestored" Value="1"/>
           <FCBool Name="InputHintEnabled" Value="1"/>
           <FCBool Name="QuickMeasureEnabled" Value="1"/>
@@ -830,7 +830,7 @@
         <FCParamGroup Name="View">
           <FCText Name="GestureRollFwdCommand">Std_SelForward</FCText>
           <FCText Name="GestureRollBackCommand">Std_SelBack</FCText>
-          <FCText Name="NavigationStyle">Gui::SiemensNXNavigationStyle</FCText>
+          <FCText Name="NavigationStyle">Gui::TouchpadNavigationStyle</FCText>
           <FCBool Name="Gradient" Value="0"/>
           <FCBool Name="RadialGradient" Value="1"/>
           <FCBool Name="Simple" Value="0"/>
@@ -1059,8 +1059,11 @@
           <FCText Name="Font">Menlo</FCText>
         </FCParamGroup>
         <FCParamGroup Name="Shortcut">
-          <FCParamGroup Name="Priorities"/>
+          <FCParamGroup Name="Priorities">
+            <FCInt Name="Std_Macro_0" Value="103"/>
+          </FCParamGroup>
           <FCParamGroup Name="Settings"/>
+          <FCText Name="Std_Macro_0">Shift+Space</FCText>
         </FCParamGroup>
         <FCParamGroup Name="PythonConsole">
           <FCText Name="ExternalPythonExecutable">/Applications/FreeCAD.app/Contents/Resources//bin/python</FCText>
@@ -1071,7 +1074,7 @@
           <FCText Name="PathToPythonExecutable"/>
         </FCParamGroup>
         <FCParamGroup Name="TreeView">
-          <FCInt Name="ColumnSize1" Value="520"/>
+          <FCInt Name="ColumnSize1" Value="292"/>
           <FCInt Name="ColumnSize2" Value="0"/>
           <FCInt Name="ColumnSize3" Value="0"/>
           <FCUInt Name="TreeActiveColor" Value="556083711"/>
@@ -1102,10 +1105,10 @@
         </FCParamGroup>
         <FCParamGroup Name="Commands"/>
         <FCParamGroup Name="RecentFiles">
-          <FCText Name="MRU0">/Users/katzo/Downloads/MountTest.FCStd</FCText>
-          <FCText Name="MRU1">/Users/katzo/ws/cad/Freecad/lesson12.FCStd</FCText>
-          <FCText Name="MRU2">/Users/katzo/ws/cad/projects/LP Holder1.FCStd</FCText>
-          <FCText Name="MRU3">/Users/katzo/ws/cad/projects/LP Holder.FCStd</FCText>
+          <FCText Name="MRU0">/Users/katzo/ws/cad/projects/LP Holder2.FCStd</FCText>
+          <FCText Name="MRU1">/Users/katzo/Downloads/MountTest.FCStd</FCText>
+          <FCText Name="MRU2">/Users/katzo/ws/cad/Freecad/lesson12.FCStd</FCText>
+          <FCText Name="MRU3">/Users/katzo/ws/cad/projects/LP Holder1.FCStd</FCText>
           <FCInt Name="RecentFiles" Value="4"/>
         </FCParamGroup>
         <FCParamGroup Name="NaviCube">
@@ -1118,9 +1121,10 @@
           <FCUInt Name="Color" Value="3503345919"/>
         </FCParamGroup>
         <FCParamGroup Name="RecentMacros">
+          <FCText Name="MRU0">/Users/katzo/ws/cad/Freecad/macros/CommandPalette.FCMacro</FCText>
           <FCInt Name="RecentMacros" Value="12"/>
-          <FCText Name="ShortcutModifiers">Ctrl+Shift+</FCText>
           <FCInt Name="ShortcutCount" Value="3"/>
+          <FCText Name="ShortcutModifiers">Ctrl+Shift+</FCText>
         </FCParamGroup>
         <FCParamGroup Name="CacheDirectory">
           <FCInt Name="Period" Value="2"/>
@@ -1159,15 +1163,28 @@
         <FCParamGroup Name="Placement"/>
       </FCParamGroup>
       <FCParamGroup Name="Macro">
-        <FCParamGroup Name="Macros"/>
+        <FCParamGroup Name="Macros">
+          <FCParamGroup Name="Std_Macro_0">
+            <FCText Name="Script">CommandPalette.FCMacro</FCText>
+            <FCText Name="Menu">ComandPalette</FCText>
+            <FCText Name="Tooltip">Command Palette is a FreeCAD macro for quickly searching and executing menu actions.
+
+</FCText>
+            <FCText Name="WhatsThis"/>
+            <FCText Name="Statustip"/>
+            <FCText Name="Pixmap">Arch_Add</FCText>
+            <FCText Name="Accel"/>
+            <FCBool Name="System" Value="0"/>
+          </FCParamGroup>
+        </FCParamGroup>
       </FCParamGroup>
       <FCParamGroup Name="MainWindow">
         <FCParamGroup Name="DockWindows">
           <FCParamGroup Name="OverlayLeft">
-            <FCInt Name="Width" Value="538"/>
-            <FCInt Name="Height" Value="939"/>
-            <FCText Name="Widgets">Model,Report view,</FCText>
-            <FCText Name="Sizes">794,105</FCText>
+            <FCInt Name="Width" Value="253"/>
+            <FCInt Name="Height" Value="627"/>
+            <FCText Name="Widgets"></FCText>
+            <FCText Name="Sizes"></FCText>
             <FCBool Name="Transparent" Value="0"/>
             <FCBool Name="AutoHide" Value="0"/>
             <FCBool Name="EditShow" Value="0"/>
@@ -1176,25 +1193,25 @@
           </FCParamGroup>
           <FCParamGroup Name="OverlayRight">
             <FCInt Name="Width" Value="490"/>
-            <FCInt Name="Height" Value="797"/>
+            <FCInt Name="Height" Value="485"/>
             <FCText Name="Widgets"></FCText>
             <FCText Name="Sizes"></FCText>
           </FCParamGroup>
           <FCParamGroup Name="OverlayTop">
-            <FCInt Name="Width" Value="695"/>
+            <FCInt Name="Width" Value="614"/>
             <FCInt Name="Height" Value="316"/>
             <FCText Name="Widgets"></FCText>
             <FCText Name="Sizes"></FCText>
           </FCParamGroup>
           <FCParamGroup Name="OverlayBottom">
-            <FCInt Name="Width" Value="1365"/>
+            <FCInt Name="Width" Value="746"/>
             <FCInt Name="Height" Value="90"/>
             <FCText Name="Widgets"></FCText>
             <FCText Name="Sizes"></FCText>
           </FCParamGroup>
-          <FCBool Name="Std_ReportView" Value="0"/>
+          <FCBool Name="Std_ReportView" Value="1"/>
           <FCBool Name="Std_SelectionView" Value="0"/>
-          <FCBool Name="Std_ComboView" Value="0"/>
+          <FCBool Name="Std_ComboView" Value="1"/>
           <FCBool Name="Std_TaskView" Value="1"/>
           <FCBool Name="Std_PythonView" Value="0"/>
         </FCParamGroup>
@@ -1270,12 +1287,15 @@
         <FCParamGroup Name="SketcherWorkbench">
           <FCParamGroup Name="Toolbar"/>
         </FCParamGroup>
+        <FCParamGroup Name="PartDesignWorkbench">
+          <FCParamGroup Name="Toolbar"/>
+        </FCParamGroup>
       </FCParamGroup>
       <FCParamGroup Name="History">
         <FCParamGroup Name="SketcherLength">
-          <FCText Name="DatumValue">12.00 mm</FCText>
+          <FCText Name="DatumValue">0.30 in</FCText>
           <FCParamGroup Name="DatumValue_History">
-            <FCText Name="Hist0">18.00 mm</FCText>
+            <FCText Name="Hist0">0.30 in</FCText>
             <FCText Name="Hist1">12.00 mm</FCText>
           </FCParamGroup>
         </FCParamGroup>
@@ -1283,12 +1303,42 @@
           <FCFloat Name="LastTranslationIncrement" Value="0.000000000000"/>
           <FCFloat Name="LastRotationIncrement" Value="5.000000000000"/>
         </FCParamGroup>
-        <FCParamGroup Name="PadLength"/>
-        <FCParamGroup Name="PadLength2"/>
-        <FCParamGroup Name="PadOffset"/>
-        <FCParamGroup Name="PadOffset2"/>
-        <FCParamGroup Name="PadTaperAngle"/>
-        <FCParamGroup Name="PadTaperAngle2"/>
+        <FCParamGroup Name="PadLength">
+          <FCText Name="Length">3.39 in</FCText>
+          <FCParamGroup Name="Length_History">
+            <FCText Name="Hist0">3.39 in</FCText>
+          </FCParamGroup>
+        </FCParamGroup>
+        <FCParamGroup Name="PadLength2">
+          <FCText Name="Length2">0.39 in</FCText>
+          <FCParamGroup Name="Length2_History">
+            <FCText Name="Hist0">0.39 in</FCText>
+          </FCParamGroup>
+        </FCParamGroup>
+        <FCParamGroup Name="PadOffset">
+          <FCText Name="Offset">0.00 in</FCText>
+          <FCParamGroup Name="Offset_History">
+            <FCText Name="Hist0">0.00 in</FCText>
+          </FCParamGroup>
+        </FCParamGroup>
+        <FCParamGroup Name="PadOffset2">
+          <FCText Name="Offset2">0.00 in</FCText>
+          <FCParamGroup Name="Offset2_History">
+            <FCText Name="Hist0">0.00 in</FCText>
+          </FCParamGroup>
+        </FCParamGroup>
+        <FCParamGroup Name="PadTaperAngle">
+          <FCText Name="TaperAngle">0.00°</FCText>
+          <FCParamGroup Name="TaperAngle_History">
+            <FCText Name="Hist0">0.00°</FCText>
+          </FCParamGroup>
+        </FCParamGroup>
+        <FCParamGroup Name="PadTaperAngle2">
+          <FCText Name="TaperAngle2">0.00°</FCText>
+          <FCParamGroup Name="TaperAngle2_History">
+            <FCText Name="Hist0">0.00°</FCText>
+          </FCParamGroup>
+        </FCParamGroup>
         <FCParamGroup Name="SketcherAngle">
           <FCText Name="DatumValue">90.00°</FCText>
           <FCParamGroup Name="DatumValue_History">
@@ -1308,6 +1358,7 @@
         </FCParamGroup>
         <FCParamGroup Name="System">
           <FCParamGroup Name="PartDesignWorkbench"/>
+          <FCParamGroup Name="SketcherWorkbench"/>
         </FCParamGroup>
       </FCParamGroup>
       <FCParamGroup Name="NavigationIndicator">

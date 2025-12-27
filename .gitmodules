@@ -1,0 +1,3 @@
+[submodule "Freecad/Freecad/macros/FreeCAD-CommandPalette"]
+	path = Freecad/Freecad/macros/FreeCAD-CommandPalette
+	url = git@github.com:ddfisher/FreeCAD-CommandPalette.git
