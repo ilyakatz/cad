@@ -1,3 +1,6 @@
 [submodule "Freecad/extensions/FreeCADCompanion"]
 	path = Freecad/extensions/FreeCADCompanion
 	url = https://github.com/graelo/FreeCADCompanion.git
+[submodule "macros/FreeCAD-CommandPalette"]
+	path = Freecad/macros/FreeCAD-CommandPalette
+	url = git@github.com:ddfisher/FreeCAD-CommandPalette.git
