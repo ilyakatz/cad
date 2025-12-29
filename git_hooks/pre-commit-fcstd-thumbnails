@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Debugging version: prints out what it's seeing and which paths it's checking.
+# - Looks for staged *.FCStd files.
+# - For each one, looks for a thumbnail and, if found, copies it to
+#   "<basename>.png" next to the FCStd file and stages that PNG.
+
+echo "DEBUG: running pre-commit-fcstd-thumbnails"
+
+# Get list of staged *.FCStd files (added, copied, modified, renamed)
+fc_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.FCStd$' || true)
+
+echo "DEBUG: staged FCStd files:"
+if [[ -z "${fc_files}" ]]; then
+  echo "  (none)"
+else
+  # shellcheck disable=SC2086
+  for f in $fc_files; do
+    echo "  $f"
+  done
+fi
+
+if [[ -z "${fc_files}" ]]; then
+  echo "DEBUG: no FCStd files staged; exiting"
+  exit 0
+fi
+
+echo "pre-commit: processing FCStd thumbnails..."
+
+# Helper: find a thumbnail for a given FCStd path
+find_thumbnail_for_fcstd() {
+  local fcstd_path="$1"
+
+  echo "DEBUG: looking for thumbnail for '$fcstd_path'"
+
+  # If it's actually a directory (bundle-style, e.g. macOS package),
+  # check inside it: <file>.FCStd/thumbnails/Thumbnail.png
+  if [[ -d "$fcstd_path" ]]; then
+    echo "DEBUG: '$fcstd_path' is a directory, checking bundle thumbnail:"
+    echo "DEBUG:   $fcstd_path/thumbnails/Thumbnail.png"
+    if [[ -f "$fcstd_path/thumbnails/Thumbnail.png" ]]; then
+      echo "$fcstd_path/thumbnails/Thumbnail.png"
+      return 0
+    fi
+  fi
+
+  # Directory containing the FCStd path
+  local fcstd_dir
+  fcstd_dir=$(dirname "$fcstd_path")
+
+  echo "DEBUG: checking same-dir thumbnails:"
+  echo "DEBUG:   ${fcstd_dir}/thumbnails/Thumbnail.png"
+  if [[ -f "${fcstd_dir}/thumbnails/Thumbnail.png" ]]; then
+    echo "${fcstd_dir}/thumbnails/Thumbnail.png"
+    return 0
+  fi
+
+  # You can add more patterns here once we know where your thumbnails live.
+  # For example, if all thumbnails are in "projects/thumbnails/Thumbnail.png",
+  # uncomment and adapt this:
+  #
+  # echo "DEBUG: checking global projects/thumbnails/Thumbnail.png"
+  # if [[ -f "projects/thumbnails/Thumbnail.png" ]]; then
+  #   echo "projects/thumbnails/Thumbnail.png"
+  #   return 0
+  # fi
+
+  echo "DEBUG: no thumbnail found for '$fcstd_path'"
+  return 1
+}
+
+# Process each staged FCStd file
+while IFS= read -r fc; do
+  echo "DEBUG: processing FCStd file '$fc'"
+
+  # Skip if file doesn't exist in working tree
+  if [[ ! -e "$fc" ]]; then
+    echo "DEBUG: '$fc' does not exist in working tree; skipping"
+    continue
+  fi
+
+  thumb_path=$(find_thumbnail_for_fcstd "$fc" || true)
+  if [[ -z "${thumb_path}" ]]; then
+    echo "DEBUG: skipping '$fc' (no thumbnail found)"
+    continue
+  fi
+
+  # Build output PNG name: same directory, same base name, .png extension
+  base_name="$(basename "$fc" .FCStd)"
+  out_png="$(dirname "$fc")/${base_name}.png"
+
+  echo "  - Found thumbnail for '$fc'"
+  echo "    thumbnail: '$thumb_path'"
+  echo "    output   : '$out_png'"
+
+  # Copy the thumbnail
+  cp "$thumb_path" "$out_png"
+
+  # Stage the PNG for commit
+  git add "$out_png"
+
+done <<< "$fc_files"
+
+echo "DEBUG: pre-commit-fcstd-thumbnails completed"
+exit 0
