@@ -32,13 +32,13 @@ echo "pre-commit: processing FCStd thumbnails..."
 find_thumbnail_for_fcstd() {
   local fcstd_path="$1"
 
-  echo "DEBUG: looking for thumbnail for '$fcstd_path'"
+  echo "DEBUG: looking for thumbnail for '$fcstd_path'" >&2
 
   # If it's actually a directory (bundle-style, e.g. macOS package),
   # check inside it: <file>.FCStd/thumbnails/Thumbnail.png
   if [[ -d "$fcstd_path" ]]; then
-    echo "DEBUG: '$fcstd_path' is a directory, checking bundle thumbnail:"
-    echo "DEBUG:   $fcstd_path/thumbnails/Thumbnail.png"
+    echo "DEBUG: '$fcstd_path' is a directory, checking bundle thumbnail:" >&2
+    echo "DEBUG:   $fcstd_path/thumbnails/Thumbnail.png" >&2
     if [[ -f "$fcstd_path/thumbnails/Thumbnail.png" ]]; then
       echo "$fcstd_path/thumbnails/Thumbnail.png"
       return 0
@@ -49,11 +49,21 @@ find_thumbnail_for_fcstd() {
   local fcstd_dir
   fcstd_dir=$(dirname "$fcstd_path")
 
-  echo "DEBUG: checking same-dir thumbnails:"
-  echo "DEBUG:   ${fcstd_dir}/thumbnails/Thumbnail.png"
+  echo "DEBUG: checking same-dir thumbnails:" >&2
+  echo "DEBUG:   ${fcstd_dir}/thumbnails/Thumbnail.png" >&2
   if [[ -f "${fcstd_dir}/thumbnails/Thumbnail.png" ]]; then
     echo "${fcstd_dir}/thumbnails/Thumbnail.png"
     return 0
+  fi
+
+  # If it's a regular .FCStd file (zip), check for embedded thumbnail
+  if [[ -f "$fcstd_path" ]]; then
+    echo "DEBUG: checking zip entry 'thumbnails/Thumbnail.png'" >&2
+    if unzip -l "$fcstd_path" "thumbnails/Thumbnail.png" >/dev/null 2>&1; then
+      # Return a marker indicating the thumbnail is inside the zip
+      echo "ZIP:$fcstd_path:thumbnails/Thumbnail.png"
+      return 0
+    fi
   fi
 
   # You can add more patterns here once we know where your thumbnails live.
@@ -66,7 +76,7 @@ find_thumbnail_for_fcstd() {
   #   return 0
   # fi
 
-  echo "DEBUG: no thumbnail found for '$fcstd_path'"
+  echo "DEBUG: no thumbnail found for '$fcstd_path'" >&2
   return 1
 }
 
@@ -94,8 +104,20 @@ while IFS= read -r fc; do
   echo "    thumbnail: '$thumb_path'"
   echo "    output   : '$out_png'"
 
-  # Copy the thumbnail
-  cp "$thumb_path" "$out_png"
+  # Copy or extract the thumbnail
+  if [[ "$thumb_path" == ZIP:* ]]; then
+    # Parse ZIP marker: ZIP:/path/to/file.FCStd:thumbnails/Thumbnail.png
+    zip_spec=${thumb_path#ZIP:}
+    zip_fcstd=${zip_spec%%:*}
+    zip_entry=${zip_spec#*:}
+    echo "DEBUG: extracting '$zip_entry' from '$zip_fcstd' to '$out_png'" >&2
+    if ! unzip -p "$zip_fcstd" "$zip_entry" > "$out_png"; then
+      echo "DEBUG: failed to extract thumbnail from '$zip_fcstd'" >&2
+      continue
+    fi
+  else
+    cp "$thumb_path" "$out_png"
+  fi
 
   # Stage the PNG for commit
   git add "$out_png"
