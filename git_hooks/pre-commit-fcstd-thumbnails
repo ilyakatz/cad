@@ -8,17 +8,22 @@ set -euo pipefail
 
 echo "DEBUG: running pre-commit-fcstd-thumbnails"
 
-# Get list of staged *.FCStd files (added, copied, modified, renamed)
-fc_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.FCStd$' || true)
+# If explicit paths are provided, use them; otherwise gather staged *.FCStd files (added, copied, modified, renamed)
+if [[ $# -gt 0 ]]; then
+  echo "DEBUG: using explicit FCStd paths (bypassing staged detection)" >&2
+  # Preserve spaces by joining arguments with newlines
+  fc_files=$(printf '%s\n' "$@")
+else
+  fc_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.FCStd$' || true)
+fi
 
 echo "DEBUG: staged FCStd files:"
 if [[ -z "${fc_files}" ]]; then
   echo "  (none)"
 else
-  # shellcheck disable=SC2086
-  for f in $fc_files; do
+  while IFS= read -r f; do
     echo "  $f"
-  done
+  done <<< "$fc_files"
 fi
 
 if [[ -z "${fc_files}" ]]; then
