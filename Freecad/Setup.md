@@ -2,6 +2,18 @@
 
 **FreeCAD Version:** 1.1.1
 
+## Back up config and addon list
+
+From this directory (`Freecad/`), run:
+
+```bash
+./backup-freecad-config.sh
+```
+
+That writes `user.cfg.backup`, `system.cfg.backup`, and `freecad_addons_only.txt` next to the script. Run it whenever you want the repo to reflect your current FreeCAD install.
+
+---
+
 ## Addons (`freecad_addons_only.txt`)
 
 [`freecad_addons_only.txt`](./freecad_addons_only.txt) lists Addon Manager package names (one per line)—a checklist from a previous install. There is no bulk import; use the file as a manual list.
