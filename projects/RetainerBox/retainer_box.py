@@ -14,6 +14,7 @@ W       = 80.0    # box width left-right (X); Y=0 = back/hinge side
 D       = 70.0    # box depth front-to-back (Y)
 rect_h  = 28.0    # height of rectangular base (Z)
 t       = 2.5     # wall thickness
+lid_t   = 4.0     # lid cap thickness (set > hinge_r so top remains flat)
 lip     = 1.2     # inner rim lip height
 
 # Lid fit/clearance
@@ -103,11 +104,11 @@ box_final = box_final.cut(box_hinge_bore_clear)
 # 3. FLAT LID  (local coords: hinge at Y=0, Z=0)
 # ============================================
 # Flat top plate
-lid_plate = Part.makeBox(W, D, t)
+lid_plate = Part.makeBox(W, D, lid_t)
 
 # Two vent holes in the lid (Z direction) so the box body remains watertight.
 for hx in [W / 2 - 15, W / 2 + 15]:
-    lid_hole = Part.makeCylinder(2.0, t + 2,
+    lid_hole = Part.makeCylinder(2.0, lid_t + 2,
                                  FreeCAD.Vector(hx, D * 0.45, -1),
                                  FreeCAD.Vector(0, 0, 1))
     lid_plate = lid_plate.cut(lid_hole)
@@ -166,8 +167,11 @@ lid_final.translate(FreeCAD.Vector(0, 0, rect_h))
 # ============================================
 # 5. HINGE PIN + END-STOP INSERTS
 # ============================================
-pin = Part.makeCylinder(pin_r - 0.15, hinge_length,
-                        FreeCAD.Vector(0, 0, rect_h),
+# shorten pin so end-stop stems and heads can sit outside the pin's axial region
+pin_len = hinge_length - 2 * (end_stop_len + end_stop_head_t)
+pin_start = end_stop_len + end_stop_head_t
+pin = Part.makeCylinder(pin_r - 0.15, pin_len,
+                        FreeCAD.Vector(pin_start, 0, rect_h),
                         FreeCAD.Vector(1, 0, 0))
 
 # Two separate inserts that press into the outer hinge bores to trap the pin.
@@ -369,7 +373,7 @@ except Exception:
 
 print("=== Retainer Box ===")
 print("Base:  {}x{}x{} mm".format(W, D, rect_h))
-print("Lid:   flat cover, thickness {} mm".format(t))
+print("Lid:   flat cover, thickness {} mm".format(lid_t))
 print("Parts: Box_Base, Lid_Flat, Hinge_Pin, Hinge_End_Stop_Left, Hinge_End_Stop_Right")
 print("Exploded view: {} ({})".format(exploded_view, explode_preset if exploded_view else "n/a"))
 print("Joints enabled: {}".format(use_assembly_joints))
