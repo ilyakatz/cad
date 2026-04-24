@@ -93,6 +93,12 @@ arm_box.translate(FreeCAD.Vector(0, -t, rect_h - hinge_r))
 
 box_final = box_body.fuse(box_knuckles).fuse(arm_box)
 
+# Final cleanup cut: keep the box hinge bore fully open after arm fusion.
+box_hinge_bore_clear = Part.makeCylinder(pin_r, hinge_length + 1,
+                                         FreeCAD.Vector(-0.5, 0, rect_h),
+                                         FreeCAD.Vector(1, 0, 0))
+box_final = box_final.cut(box_hinge_bore_clear)
+
 # ============================================
 # 3. FLAT LID  (local coords: hinge at Y=0, Z=0)
 # ============================================
@@ -146,6 +152,12 @@ arm_lid = Part.makeBox(W, t, hinge_r)
 arm_lid.translate(FreeCAD.Vector(0, -t, 0))
 
 lid_local = lid_shell.fuse(lid_knuckles).fuse(arm_lid)
+
+# Final cleanup cut for lid hinge bores in lid local coordinates (Z=0 hinge axis).
+lid_hinge_bore_clear = Part.makeCylinder(pin_r, hinge_length + 1,
+                                         FreeCAD.Vector(-0.5, 0, 0),
+                                         FreeCAD.Vector(1, 0, 0))
+lid_local = lid_local.cut(lid_hinge_bore_clear)
 
 # Place lid in CLOSED position (hinge center at Y=0, Z=rect_h)
 lid_final = lid_local.copy()
