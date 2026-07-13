@@ -1,0 +1,4 @@
+interface:
+  display_name: "FreeCAD Design"
+  short_description: "Create and validate parametric FreeCAD models"
+  default_prompt: "Use $freecad-design to create a new parametric FreeCAD design and export its manufacturable solids."
