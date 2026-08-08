@@ -1,0 +1,172 @@
+---
+name: freecad-generate-image
+description: Generate clean 3D box renderings from FreeCAD designs using Python + isometric SVG projection
+---
+
+# freecad-generate-image
+
+Generate clean technical images of FreeCAD box/enclosure designs using Python geometry + isometric SVG projection. Works in headless environments (no GUI needed).
+
+## When to use
+- User asks to "render" or "show" or "see" a FreeCAD box design
+- User wants a visual of an enclosure / box / housing / case
+- User needs a screenshot-style rendering but only has headless access
+- The design is parametric (box, lid, divider, slots)
+
+## Strategy
+
+**Do NOT try to use FreeCAD's GUI rendering in headless mode.** FreeCAD 26.x strips `newView()`, `ActiveView`, `saveImage()`, and all OCC visualization modules (`OpenGl`, `Visualisation`) from the headless build. It will crash silently.
+
+Instead:
+1. Build the geometry in FreeCAD's Python `Part` module (works headless)
+2. Export STEP/STL if needed (`Part.export()`)
+3. Generate an SVG using isometric projection from Python
+
+## Headless FreeCAD paths
+
+On macOS (FreeCAD 2.app from conda):
+
+```
+PYTHONPATH: /Applications/FreeCAD 2.app/Contents/Resources/lib/python3.1/site-packages
+            /Applications/FreeCAD 2.app/Contents/Resources/lib
+PYTHONHOME: /Applications/FreeCAD 2.app/Contents/Resources
+PATH:       /Applications/FreeCAD 2.app/Contents/Resources/libexec
+            /Applications/FreeCAD 2.app/Contents/Resources/bin
+DYLD_LIBRARY_PATH: /Applications/FreeCAD 2.app/Contents/Resources/lib
+```
+
+## What works headless
+
+- `import FreeCAD` → `FreeCAD.newDocument("Name")`
+- `import Part` → `Part.makeBox()`, `Part.makeCylinder()`, `.cut()`, `.fuse()`, `.removeSplitter()`
+- `doc.addObject("Part::Feature", "Name")` → `.Shape = shape`
+- `doc.saveAs("path.FCStd")`
+- `Part.export([shape], "path.STEP")` — STEP export
+- `doc.save()`
+- `FreeCAD.Version()`
+
+## What does NOT work headless
+
+- `doc.newView("3DView")` — AttributeError, no GUI
+- `doc.ActiveView` — None
+- `view.saveImage()` — crashes
+- `FreeCADGui` — not importable
+- `OCC.Core.OpenGl`, `OCC.Core.Visualisation` — ImportError
+- `FreeCAD <script.py>` binary — crashes (no CLI headless mode)
+
+## Workaround: Generate SVG from Python geometry
+
+Use a hand-rolled isometric projection renderer. The pattern:
+
+```python
+import math
+
+# Constants
+w, h = 1400, 1000           # canvas size
+cx, cy = w // 2, h // 2     # center point
+s = 4                        # scale: 1mm = 4px
+
+# Isometric projection function
+def proj(px, py, pz, ox, oy):
+    angle_x = math.radians(30)
+    angle_y = math.radians(-30)
+    x = ox + px * math.cos(angle_x) + py * math.cos(angle_y)
+    y = oy + px * math.sin(angle_x) + py * math.sin(angle_y) - pz
+    return (int(x), int(y))
+```
+
+Build the FreeCAD geometry to find bounds, then center the SVG projection:
+
+```python
+body_out = [
+    (0, 0, 0), (bl, 0, 0), (bl, bw, 0), (0, bw, 0),
+    (0, 0, bh), (bl, 0, bh), (bl, bw, bh), (0, bw, bh)
+]
+# Find bbox of projected points
+projs = [proj(*v, 0, 0) for v in body_out]
+ox = cx - (min(p[0] for p in projs) + max(p[0] for p in projs)) // 2
+oy = cy - (min(p[1] for p in projs) + max(p[1] for p in projs)) // 2 + 20
+```
+
+Then render faces as SVG polygons with appropriate colors:
+
+```python
+def poly(verts, fill, stroke="#2a1a08", sw=2):
+    pts = [proj(*v, ox, oy) for v in verts]
+    pts_str = ' '.join(f'{p[0]},{p[1]}' for p in pts)
+    return f'<polygon points="{pts_str}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}" stroke-linejoin="round"/>'
+
+# Draw outer faces (wood/brown tones for PLA)
+lines.append(poly([(0,0,0),(bl,0,0),(bl,0,bh),(0,0,bh)], "#c4943a"))  # front
+lines.append(poly([(bl,0,0),(bl,bw,0),(bl,bw,bh),(bl,0,bh)], "#a87828"))  # right
+# ... more faces
+```
+
+### Key rendering tips
+
+1. **Order matters**: Draw back-to-front (exterior faces first, then interior cavity, then internal parts)
+2. **Color hierarchy**: Outer faces warm brown → interior cavity dark brown → divider tan → cards blue
+3. **Lid offset**: Raise the lid vertically in the projection to show an "exploded" view of how it fits
+4. **Dimension annotations**: Draw thin lines from key points with `monospace` text labels
+5. **Spec panel**: A small info box in a corner for dimensions/capacity/material
+
+### Color palette for PLA enclosure
+
+| Face | Color |
+|------|-------|
+| Front (visible cavity) | `#c4943a` |
+| Right face | `#a87828` |
+| Left face | `#b8842e` |
+| Back face | `#8a6420` |
+| Bottom (exterior) | `#6a4a15` |
+| Interior cavity top | `#1a0e04` |
+| Interior cavity walls | `#1e1206` / `#100804` |
+| Divider sheet | `#d4a842` |
+| SD card placeholder | `#3050a0` |
+| Lid top plate | `#b8902a` |
+| Lid lips | `#c49c32` / `#a07820` |
+
+### Converting SVG to PNG
+
+Use macOS `sips`:
+```bash
+sips -s format png "design.svg" --out "design.png"
+```
+
+### Typical box design parameters
+
+```python
+# Standard SD card box (from reference photos + JEITA ISO)
+bl = 142.0  # body length (outer mm)
+bw = 102.0  # body width (outer mm)
+bh = 60.0   # body height (outer mm)
+wall = 2.0  # wall thickness (FDM 3D print, PLA)
+
+# Inner cavity: (bl - 2*wall) x (bw - 2*wall) x (bh - 20)
+# 20mm from top = open top for divider insertion
+```
+
+### Full workflow
+
+1. Build geometry in FreeCAD Python (Part module) for validation and STEP export
+2. Simultaneously generate SVG using the same dimensions + isometric projection
+3. Convert SVG → PNG with `sips`
+4. Save both `.FCStd` and `.STEP` files alongside the image
+
+## Pattern summary
+
+| Goal | Method |
+|------|--------|
+| Validate geometry | FreeCAD `Part` module, `.removeSplitter()`, check `.Solids` |
+| Export for 3D printing | `Part.export([shape], "file.STL")` |
+| Export for CNC/CAD | `Part.export([shape], "file.STEP")` |
+| Save editable source | `doc.saveAs("file.FCStd")` |
+| Show user what it looks like | Python + SVG + isometric projection |
+| 3D view on user's machine | Generate `.FCStd` + `.STEP`, user opens in FreeCAD GUI |
+
+## Files produced
+
+- `{name}.FCStd` — FreeCAD document (user opens in GUI for 3D rotation)
+- `{name}.STEP` — CAD-interchange STEP files
+- `{name}.svg` — SVG source (hand-editable)
+- `{name}.png` — Final image (via `sips`)

@@ -7,17 +7,35 @@ description: Create, revise, validate, and export parametric mechanical designs 
 
 Create reproducible CAD from a parameterized Python macro. Treat photographs as shape references, not dimensional evidence.
 
+## FreeCAD 2.x Environment
+
+**Critical: FreeCAD 2.x (conda build) has a heavily stripped headless Python API.**
+
+- **Headless Python API WORKS for**: `Part.makeBox()`, `Part.makeCylinder()`, `.cut()`, `.fuse()`, `.removeSplitter()`, `doc.addObject("Part::Feature", name)`, `doc.saveAs()`, `Part.export()`. All topology operations are available.
+- **Headless Python API DOES NOT WORK for**: `doc.newView()`, `doc.ActiveView`, `view.saveImage()`, `FreeCADGui`, all visualization (`OCC.Core.OpenGl`, `OCC.Core.Visualisation`). These are compiled out of the headless build.
+- **FreeCAD CLI binary has NO headless mode**: Running `FreeCAD <script.py>` crashes on exit regardless of content. Always use Python directly with the correct paths.
+
+On macOS (conda FreeCAD 2.app):
+```
+PYTHONPATH: /Applications/FreeCAD 2.app/Contents/Resources/lib/python3.1/site-packages
+            /Applications/FreeCAD 2.app/Contents/Resources/lib
+PYTHONHOME: /Applications/FreeCAD 2.app/Contents/Resources
+PATH:       /Applications/FreeCAD 2.app/Contents/Resources/libexec
+            /Applications/FreeCAD 2.app/Contents/Resources/bin
+DYLD_LIBRARY_PATH: /Applications/FreeCAD 2.app/Contents/Resources/lib
+```
+
 ## Workflow
 
 1. Inspect the project and reference inputs. Preserve existing user files and unrelated edits.
 2. Establish part boundaries, axes, origin, units, manufacturing process, material, fits, and critical dimensions. If the user permits assumptions, record them explicitly and expose them as named parameters.
-3. Locate FreeCAD with `command -v freecadcmd`, `command -v FreeCADCmd`, or common application paths. On macOS, also check `/Applications/FreeCAD.app/Contents/Resources/bin/freecadcmd`.
+3. Locate FreeCAD Python (not the CLI binary) at `/Applications/FreeCAD 2.app/Contents/Resources`. Set `PYTHONPATH` and `DYLD_LIBRARY_PATH` as above. **Do not use `FreeCAD <script.py>` CLI invocation** — it crashes.
 4. Create a `.FCMacro` as the source of truth. Use millimetres, named parameters, deterministic object names, and one final `PartDesign::Feature` or `Part::Feature` per requested solid.
 5. Keep components separate. Fuse geometry that belongs to one manufactured part; never use visual color as a substitute for correct solid ownership.
 6. Add a parameter spreadsheet and design-notes object to the document. State assumed materials, tolerances, clearances, attachment details, and omitted hidden features.
-7. Recompute, verify each requested object is valid and contains the expected number of solids, save `.FCStd`, then export separate STEP files. Export STL only when requested.
-8. Run `scripts/validate_fcstd.py` with FreeCAD's command-line executable. Correct every failure before delivery.
-9. Compare front, top, left, right, and isometric silhouettes against the references. Pay special attention to lobes, notches, overhangs, part interfaces, and which component owns each feature.
+7. Build geometry headlessly via Python's `Part` module (works), save `.FCStd`, export STEP files (`Part.export()` works). Do NOT attempt STL meshing headlessly — `BRepMesh_FastDiscreteExplorer` was removed in FreeCAD 2.x, and `MeshPart` API changed.
+8. Run `scripts/validate_fcstd.py` with FreeCAD's Python executable (headless). Correct every failure before delivery.
+9. If the user needs a visual, generate an SVG from the Python geometry using an isometric projection renderer (see `/freecad-generate-image` skill). Do not attempt FreeCAD GUI rendering headlessly.
 10. Deliver clickable paths to the native document, macro, and exports. Summarize material and dimensional assumptions concisely.
 
 ## Modeling rules
@@ -30,6 +48,13 @@ Create reproducible CAD from a parameterized Python macro. Treat photographs as 
 - Add draft only when the pull direction and tooling intent are known or explicitly assumed.
 - Use general tolerances only for non-mating features. Specify functional clearances separately.
 - Avoid threads, knurling, and dense cosmetic detail unless required; represent them with manufacturable simplified geometry.
+
+## Headless API notes
+
+- **Shape validation**: Use `obj.Shape.isValid()` (on the Feature's Shape property), NOT `solid.IsValid()` (TopoDS_Solid has no Python-exposed IsValid in FreeCAD 2.x).
+- **STL export headless**: Not possible in FreeCAD 2.x. `BRepMesh_FastDiscreteExplorer` was removed, and `MeshPart` API signature changed. Export STEP or save FCStd and let the user mesh in the GUI if needed.
+- **SVG rendering workaround**: For visual output, use a Python isometric projection renderer (see `/freecad-generate-image`). This is the recommended approach for delivering images without the GUI.
+- **Solid count check**: `obj.Shape.Solids` returns a list of TopoDS_Solid objects. Check `len(obj.Shape.Solids) == 1` instead of `isValid()`.
 
 ## Photo reconstruction
 
